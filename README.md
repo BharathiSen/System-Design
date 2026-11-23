@@ -1,6 +1,5 @@
 # Scale Quest
 
-**▶ Try it live: https://bharathisen.github.io/System-Design/** (no sign-up; install it as an app and it works offline)
 
 ![Scale Quest home screen](docs/home.png)
 
