@@ -27,9 +27,9 @@ function addElements(skels){
 function addStencil(i){const [l,s,k,sh]=STENCIL[i];const c=center();addElements([skel(k,l,s,c.x-85+(Math.random()-.5)*80,c.y-36+(Math.random()-.5)*80,sh)]);}
 function specToSkels(spec,ox,oy){
   const p="r"+uid()+"_";const out=[];const sx=1.55,sy=1.6;
-  spec.n.forEach(([id,x,y,label,sub,kind])=>out.push(skel(kind,label,sub,ox+x*sx-85,oy+y*sy-36,kind==="client"?"ellipse":null,p+id)));
+  spec.n.forEach(([id,x,y,label,sub,kind])=>out.push(Object.assign(skel(kind,label,sub,ox+x*sx-85,oy+y*sy-36,kind==="client"?"ellipse":null,p+id),{customData:{sq:"ref"}})));
   (spec.e||[]).forEach(([a,b,label,dash])=>{const A=spec.n.find(n=>n[0]===a),B=spec.n.find(n=>n[0]===b);if(!A||!B)return;
-    out.push({type:"arrow",x:ox+A[1]*sx,y:oy+A[2]*sy,width:(B[1]-A[1])*sx,height:(B[2]-A[2])*sy,strokeColor:"#495057",strokeStyle:dash?"dashed":"solid",start:{id:p+a},end:{id:p+b},label:label?{text:label,fontSize:14}:undefined});});
+    out.push({type:"arrow",customData:{sq:"ref"},x:ox+A[1]*sx,y:oy+A[2]*sy,width:(B[1]-A[1])*sx,height:(B[2]-A[2])*sy,strokeColor:"#495057",strokeStyle:dash?"dashed":"solid",start:{id:p+a},end:{id:p+b},label:label?{text:label,fontSize:14}:undefined});});
   return out;
 }
 function templateSkels(p,c){
@@ -40,7 +40,7 @@ function templateSkels(p,c){
   out.push({type:"rectangle",x:x+420,y,width:980,height:610,strokeColor:"#868e96",backgroundColor:"transparent",strokeStyle:"dashed",roundness:{type:3}});
   out.push({type:"text",x:x+436,y:y+10,text:"5 · High-level design  (walk one request end to end)",fontSize:20,strokeColor:"#1971c2"});
   out.push({type:"text",x:x+420,y:y+630,text:"6 · Deep dives:  1)            2)            3)\n7 · Bottlenecks + monitoring:",fontSize:18,strokeColor:"#495057"});
-  return out;
+  return out.map(o=>Object.assign(o,{customData:{sq:"frame"}}));
 }
 
 function currentProblem(){const id=V.board.pid;return PROBLEMS.find(p=>p.id===id)||null;}
@@ -85,7 +85,7 @@ V.board=function(el){
     try{localStorage.removeItem(sceneKey(curId));}catch(x){}delete boards[curId];curId=null;window.SQ.save();api=null;window.SQ.render();};
   $$("[data-s]",el).forEach(bt=>bt.onclick=()=>addStencil(+bt.dataset.s));
   $("#wbFrame").onclick=()=>addElements(templateSkels(p,center()));
-  $("#wbRef").onclick=()=>{if(!p||!p.sol.dia)return;const els=api?api.getSceneElements():[];let maxX=0;els.forEach(e=>{maxX=Math.max(maxX,e.x+(e.width||0));});const c=center();addElements([{type:"text",x:(els.length?maxX+120:c.x-500),y:c.y-330,text:"Reference: "+p.title,fontSize:24,strokeColor:"#2f9e44"},...specToSkels(p.sol.dia,(els.length?maxX+120:c.x-500),c.y-280)]);window.SQ.toast("Reference added. Compare it with yours.");};
+  $("#wbRef").onclick=()=>{if(!p||!p.sol.dia)return;const els=api?api.getSceneElements():[];let maxX=0;els.forEach(e=>{maxX=Math.max(maxX,e.x+(e.width||0));});const c=center();addElements([{type:"text",x:(els.length?maxX+120:c.x-500),y:c.y-330,text:"Reference: "+p.title,fontSize:24,strokeColor:"#2f9e44",customData:{sq:"ref"}},...specToSkels(p.sol.dia,(els.length?maxX+120:c.x-500),c.y-280)]);window.SQ.toast("Reference added. Compare it with yours.");};
   $$("[data-m]",el).forEach(bt=>bt.onclick=()=>window.SQ.startTimer("wbTimer",+bt.dataset.m));
   mount(b);
 };
@@ -124,6 +124,10 @@ function doSave(manual){
     else{window.SQ.save();window.SQ.toast("Saved (XP for this board already claimed today)");}
   }else window.SQ.save();
 }
+window.SQ.wbElements=()=>api?api.getSceneElements():[];
+window.SQ.wbPngUrl=()=>{if(!api||!window.ExcalidrawLib)return Promise.resolve(null);const els=api.getSceneElements();if(!els.length)return Promise.resolve(null);
+  return window.ExcalidrawLib.exportToBlob({elements:els,files:api.getFiles(),appState:{...api.getAppState(),exportBackground:true,exportWithDarkMode:false},mimeType:"image/png"}).then(b=>URL.createObjectURL(b)).catch(()=>null);};
+window.SQ.wbProblem=()=>currentProblem();window.SQ.wbBoardId=()=>curId;
 function exportPng(){
   if(!api||!window.ExcalidrawLib)return;
   const els=api.getSceneElements();if(!els.length){window.SQ.toast("Nothing to export yet");return;}

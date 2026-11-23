@@ -204,7 +204,7 @@ function wireQuiz(root,qs,prefix,onDone,ids){
         const id=ids?ids[i]:prefix+i;const t=today();if(S.qDay.date!==t)S.qDay={date:t,ids:{}};
         bump("quiz");
         if(!S.qDay.ids[id]){S.qDay.ids[id]=1;addXP(S.stats.combo>=5?15:10,S.stats.combo>=3?`Correct · combo x${S.stats.combo}`:"Correct answer");}else{save();checkBadges();renderHud();}
-      }else{S.stats.combo=0;save();}
+      }else{S.stats.combo=0;const mid=ids?ids[i]:prefix+i;if(window.SQ.addMistake&&/^t:/.test(mid)){window.SQ.addMistake(mid);$(".why",box).insertAdjacentHTML("beforeend",' <span class="small muted">· Saved to your <a href="#weak">weak spots</a>.</span>');}save();}
       answered++;if(answered===qs.length&&onDone)onDone();
     });
   });
@@ -228,8 +228,8 @@ const ICONS={
 const NAV=[["home","Home"],["path","Learn path"],["revise","Fast revision"],["review","Review queue"],["arena","Design arena"],["practice","Practice gym"],["board","Whiteboard"],["lld","LLD dojo"],["trophies","Trophies"],["library","Library"]];
 const TABS=[["home","Home"],["path","Learn"],["arena","Arena"],["review","Review"],["practice","Gym"],["trophies","Me"]];
 const svgI=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
-function sectionOf(r){if(r.startsWith("topic-"))return"path";if(r.startsWith("problem-"))return"arena";if(["quiz","cards","gym","mock","scores"].includes(r))return"practice";return r;}
-function navLink(k,t,r){const n=k==="review"?srsDue().length:0;return `<a href="#${k}" class="${r===k?"on":""}">${svgI(k)}${t}${n?`<span class="nb" aria-label="${n} due">${n}</span>`:""}</a>`;}
+function sectionOf(r){if(r==="weak")return"review";if(r==="report")return"trophies";if(r.startsWith("topic-"))return"path";if(r.startsWith("problem-"))return"arena";if(["quiz","cards","gym","mock","scores","schema"].includes(r)||/^(schema|sql)-/.test(r))return"practice";return r;}
+function navLink(k,t,r){const n=k==="review"?srsDue().length+(window.SQ.weakDueCount?window.SQ.weakDueCount():0)+(window.SQ.redoDue?window.SQ.redoDue().length:0):0;return `<a href="#${k}" class="${r===k?"on":""}">${svgI(k)}${t}${n?`<span class="nb" aria-label="${n} due">${n}</span>`:""}</a>`;}
 function renderHud(){
   const L=levelOf(S.xp),lo=need(L),hi=need(L+1),pct=Math.round((S.xp-lo)/(hi-lo)*100);
   const st=streakInfo();const tx=S.log[today()]||0;
@@ -252,6 +252,7 @@ function render(){
   let fn=V[r];let arg;
   if(!fn&&r.startsWith("topic-")){fn=V.topic;arg=r.slice(6);}
   if(!fn&&r.startsWith("problem-")){fn=V.problem;arg=r.slice(8);}
+  if(!fn){const m=r.match(/^([a-z]+)-(.+)$/);if(m&&V[m[1]+"_x"]){fn=V[m[1]+"_x"];arg=m[2];}}
   if(!fn)fn=V.home;
   if(window.SQ.leaveBoard)window.SQ.leaveBoard();
   view.innerHTML="";fn(view,arg);renderHud();
@@ -416,6 +417,7 @@ V.problem=function(el,id){
       const first=pr.lastDay!==today();pr.attempts++;pr.best=Math.max(pr.best,total);pr.lastDay=today();pr.hist=(pr.hist||[]).concat([{d:today(),total}]);
       S.stats.attempts++;bump("problem");
       addXP(first?100+total*5:20,`Attempt: ${p.title} (${total}/16)`);
+      if(window.SQ.onAttempt)window.SQ.onAttempt(p.id,total);
       clearInterval(timerInt);V.problem.tab={id,t:"solution"};render();
     };
   }else{

@@ -13,7 +13,8 @@ V.practice=function(el){
     ["gym","Estimation gym","Back-of-envelope drills: QPS, storage, bandwidth, cache size, servers.","15 XP per hit","var(--w3)"],
     ["mock","Mock interview","A random problem, a 45-minute clock with phase checkpoints, and a scorecard.","150+ XP","var(--w5)"],
     ["scores","Scorecards","Every mock and attempt you've graded, so you can watch the trend.","Track","var(--w6)"],
-    ["board","Whiteboard","Excalidraw with an architecture stencil and starter templates for every problem.","40 XP per save","var(--w1)"]
+    ["board","Whiteboard","Excalidraw with an architecture stencil and starter templates for every problem.","40 XP per save","var(--w1)"],
+    ["schema","Schema & SQL lab",SCHEMAS.length+" \"design the tables\" exercises and "+SQL_SETS.reduce((n,x)=>n+x.qs.length,0)+" SQL queries that run in your browser.","40 XP per schema · 20 per query","var(--w8)"]
   ];
   el.innerHTML=`<div class="page-head"><div><div class="eyebrow">Practice gym</div><h1>Reps beat reading</h1><p>Short, repeatable drills. Do at least one every day; they feed your daily quests.</p></div></div>
   <div class="grid g3">${tiles.map(([h,t,d,x,c])=>`<a class="card pcard" href="#${h}" style="border-top:4px solid ${c}"><h3>${t}</h3><p>${d}</p><span class="tag" style="align-self:flex-start">${x}</span></a>`).join("")}</div>`;
@@ -50,7 +51,7 @@ V.cards=function(el){
       const r=+b.dataset.r;const s=S().cards[c.id]||{box:0};
       s.box=r===0?0:Math.min(5,s.box+r);s.due=window.SQ.addDays(today(),INTERVAL[s.box]||0);if(r===0)s.due=today();
       S().cards[c.id]=s;S().stats.cards++;done++;window.SQ.bump("cards");window.SQ.addXP(2,"Card reviewed",true);
-      if(r===0)due.push(c);i++;show();
+      if(r===0){due.push(c);if(window.SQ.addMistake)window.SQ.addMistake("c:"+c.id);}i++;show();
     });
   }
   show();
@@ -108,7 +109,7 @@ V.mock=function(el){
     const total=window.SQ.RUBRIC.reduce((a,[k])=>a+sc[k],0);
     S().mocks.push({d:today(),p:p.id,title:p.title,sc:Object.assign({},sc),total,learn:$("#mlearn").value});
     const pr=S().prob[p.id]=S().prob[p.id]||{notes:{},attempts:0,best:0};pr.attempts++;pr.best=Math.max(pr.best,total);
-    S().stats.attempts++;window.SQ.bump("problem");window.SQ.addXP(150+total*5,`Mock finished (${total}/16)`);V.mock.p=null;location.hash="#scores";
+    S().stats.attempts++;window.SQ.bump("problem");if(window.SQ.onAttempt)window.SQ.onAttempt(p.id,total);window.SQ.addXP(150+total*5,`Mock finished (${total}/16)`);V.mock.p=null;location.hash="#scores";
   };
 };
 
@@ -127,12 +128,13 @@ V.scores=function(el){
 V.lld=function(el){
   const tab=V.lld.tab||"solid";
   el.innerHTML=`<div class="page-head"><div><div class="eyebrow">LLD dojo</div><h1>Low-level design</h1><p>The machine-coding / OOD round: clean classes, SOLID, the right pattern, and working code. Python throughout, matching your stack.</p></div></div>
-  <div class="tabs">${[["solid","OOP + SOLID"],["patterns","Design patterns"],["approach","How to run the round"],["worked","Worked problems"],["list","Problem ladder"]].map(([k,n])=>`<button data-t="${k}" class="${tab===k?"on":""}">${n}</button>`).join("")}</div><div id="lt"></div>`;
+  <div class="tabs">${[["solid","OOP + SOLID"],["patterns","Design patterns"],["approach","How to run the round"],["worked","Worked problems"],["code","Code it (runs Python)"],["list","Problem ladder"]].map(([k,n])=>`<button data-t="${k}" class="${tab===k?"on":""}">${n}</button>`).join("")}</div><div id="lt"></div>`;
   $$(".tabs button",el).forEach(b=>b.onclick=()=>{V.lld.tab=b.dataset.t;window.SQ.render();});
   const box=$("#lt");
   if(tab==="solid")box.innerHTML=LLD.solid;
   else if(tab==="approach")box.innerHTML=LLD.approach;
   else if(tab==="patterns")box.innerHTML=`<p class="muted">The patterns that actually come up in fresher LLD rounds are marked <span class="tag easy">core</span>. Learn those first.</p><div class="tscroll"><table class="tbl"><tr><th>Pattern</th><th>Type</th><th>Problem it solves</th><th>Where you'd use it</th></tr>${LLD.patterns.map(p=>`<tr><td><b>${p[0]}</b> ${p[4]?'<span class="tag easy">core</span>':""}</td><td>${p[1]}</td><td>${p[2]}</td><td>${p[3]}</td></tr>`).join("")}</table></div>${LLD.patternCode}`;
+  else if(tab==="code")window.SQ.kataTab(box);
   else if(tab==="worked")box.innerHTML=LLD.worked.map(w=>`<details class="dd"><summary>${w.t} <span class="tag ${w.d.toLowerCase()}">${w.d}</span></summary><div>${w.body}</div></details>`).join("");
   else{
     box.innerHTML=`<p class="muted">From the awesome-low-level-design ladder. Solve each in 45 minutes with classes + a small demo, then tick it for +30 XP.</p>`+["Easy","Medium","Hard","Concurrency"].map(d=>`<div class="sect"><h2>${d}</h2></div><div class="grid g3">${LLD.ladder.filter(x=>x[1]===d).map(x=>`<label class="card row" style="cursor:pointer;gap:10px;flex-wrap:nowrap"><input type="checkbox" data-l="${esc(x[0])}" ${S().lld[x[0]]?"checked":""} style="width:18px;height:18px;accent-color:var(--accent);flex:none"><span><b>${esc(x[0])}</b><span class="small muted" style="display:block">${x[2]}</span></span></label>`).join("")}</div>`).join("");

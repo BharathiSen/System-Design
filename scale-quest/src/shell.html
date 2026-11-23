@@ -341,8 +341,8 @@ details.dd>div{padding:0 14px 12px}
 .fc i{width:100%;max-width:30px;border-radius:6px 6px 2px 2px;background:var(--accent);opacity:.75}
 .fc.today i{background:var(--flame);opacity:1}
 .fc small{font-size:.68rem;color:var(--muted);font-weight:700}.fc .fn{font-size:.75rem;font-weight:800;font-variant-numeric:tabular-nums;min-height:1em}
-.pips{display:inline-flex;gap:4px}.pips i{width:12px;height:12px;border-radius:50%;background:var(--line);display:inline-block}
-.pips i.on{background:var(--good)}.pips i.cur{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.rpips{display:inline-flex;gap:4px}.rpips i{width:12px;height:12px;border-radius:50%;background:var(--line);display:inline-block}
+.rpips i.on{background:var(--good)}.rpips i.cur{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .rv-session{border-top:5px solid var(--wc)}
 .rv-session #sum{display:flex;flex-direction:column;gap:8px;margin-top:6px}.rv-session #sum.hidden{display:none}
 .verdict{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;border-left:5px solid var(--good)}
@@ -414,4 +414,25 @@ details.rv-plain p{margin:6px 0 0;line-height:1.5}
 @media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
 .jstats{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;min-width:220px}
 .jstats b{font-family:var(--f-display);font-size:1.4rem;font-weight:800;display:block;line-height:1.1}.jstats span{font-size:.76rem;color:var(--muted);font-weight:600}
+textarea.code{width:100%;min-height:200px;font-family:var(--f-mono,"JetBrains Mono",monospace);font-size:.86rem;line-height:1.5;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line-2);background:var(--panel-2);color:var(--ink);resize:vertical;tab-size:2}
+textarea.code:focus{outline:none;border-color:var(--accent)}
+.mono{font-family:var(--f-mono,"JetBrains Mono",monospace);font-size:.8rem;white-space:pre-wrap;word-break:break-word}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}.chk input{width:18px;height:18px;accent-color:var(--accent);flex:none;margin-top:2px}
+.lv.lab{--lc:var(--w8);border-radius:18px}
+.callout.story{background:color-mix(in srgb,var(--w2) 10%,var(--panel));border-color:transparent}.callout.story .ct{color:var(--w2)}
+.rec{margin-top:12px;border-left:5px solid var(--w5)}
+.btn.rec-on{background:var(--bad);border-color:var(--bad);color:#fff;animation:recpulse 1.2s ease-in-out infinite}
+@keyframes recpulse{50%{opacity:.75}}@media (prefers-reduced-motion:reduce){.btn.rec-on{animation:none}}
+.transcript{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--panel-2);font-size:.92rem;line-height:1.6;max-height:240px;overflow:auto;white-space:pre-wrap}
+#interrupt{position:fixed;right:16px;bottom:84px;z-index:80;width:min(360px,calc(100vw - 32px));background:var(--panel);border:2px solid var(--w5);border-radius:var(--r);padding:14px 16px;box-shadow:0 14px 40px rgba(0,0,0,.25);animation:intin .25s ease-out}
+#interrupt p{margin:4px 0 6px;font-weight:700;font-size:1.02rem}
+@keyframes intin{from{transform:translateY(12px);opacity:0}}@media (min-width:900px){#interrupt{bottom:20px}}
+.kspec{font-size:.92rem}.kspec ul{padding-left:1.1rem;margin:6px 0}
+.ktests{list-style:none;padding:0;margin:6px 0}.ktests li{padding:4px 0;border-bottom:1px solid var(--line);font-weight:600}.ktests li.ok{color:var(--good)}.ktests li.bad{color:var(--bad)}.ktests li .small{color:var(--muted);font-weight:500;display:block}
+#wbcheck{position:fixed;inset:0;z-index:95;background:rgba(10,12,20,.55);display:grid;place-items:start center;overflow:auto;padding:24px 16px}
+.wbc-in{width:min(1100px,100%);background:var(--bg);border-radius:var(--r);padding:16px 18px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.wbc-img{margin-top:8px;min-height:120px;display:grid;place-items:center;background:#fff;border-radius:8px;overflow:hidden}.wbc-img img{max-width:100%;max-height:360px}
+.report-top{display:flex;gap:18px;align-items:center}
+.grade{flex:none;width:84px;height:84px;border-radius:22px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:2.6rem;color:#fff;background:var(--gc)}
+.grade.sm{width:44px;height:44px;border-radius:12px;font-size:1.4rem}
 </style>

@@ -83,12 +83,17 @@ T({id:"latency",w:1,title:"Latency, throughput and numbers to know",mins:12,
 tldr:"<b>Latency</b> is how long one request takes; <b>throughput</b> is how many you finish per second. Know a few orders of magnitude so you can reason about where time goes.",
 notes:`<h3>Percentiles, not averages</h3>
 <p>Report <b>p50 / p95 / p99</b>. If p99 is 2 s, 1 in 100 requests is slow; a page that makes 50 backend calls hits that tail often.</p>
-<h3>Latency numbers (rough, from Jeff Dean's list)</h3>
-<table><tr><th>Operation</th><th>Time</th></tr>
-<tr><td>L1 cache reference</td><td>0.5 ns</td></tr><tr><td>Main memory reference</td><td>100 ns</td></tr>
-<tr><td>Read 1 MB sequentially from memory</td><td>250 µs</td></tr><tr><td>Round trip in the same data centre</td><td>0.5 ms</td></tr>
-<tr><td>Read 1 MB sequentially from SSD</td><td>1 ms</td></tr><tr><td>Disk seek (HDD)</td><td>10 ms</td></tr>
-<tr><td>Packet California → Netherlands → California</td><td>150 ms</td></tr></table>
+<h3>Latency numbers (rough, modern hardware)</h3>
+<table><tr><th>Operation</th><th>Today (rough)</th><th>Classic list (2009)</th></tr>
+<tr><td>L1 cache reference</td><td>~1 ns</td><td>0.5 ns</td></tr>
+<tr><td>Main memory reference</td><td>~100 ns</td><td>100 ns</td></tr>
+<tr><td>Read 1 MB sequentially from memory</td><td>~3–10 µs</td><td>250 µs</td></tr>
+<tr><td>Read 4 KB randomly from SSD</td><td>~20–100 µs</td><td>150 µs</td></tr>
+<tr><td>Read 1 MB sequentially from SSD (NVMe)</td><td>~50–200 µs</td><td>1 ms</td></tr>
+<tr><td>Round trip in the same data centre</td><td>~0.5 ms</td><td>0.5 ms</td></tr>
+<tr><td>Disk seek (HDD)</td><td>~5–10 ms</td><td>10 ms</td></tr>
+<tr><td>Packet California → Netherlands → California</td><td>~150 ms</td><td>150 ms</td></tr></table>
+<p>Memory and SSDs got far faster since the classic list; network round trips didn't, because distance and the speed of light limit them. If an interviewer quotes the classic numbers, either set is fine. What matters is the <b>order of magnitude</b> and the ranking.</p>
 <p>Takeaways: memory ≫ SSD ≫ network across continents. Avoid cross-region calls on the hot path; batch small calls.</p>
 <h3>Capacity rules of thumb</h3>
 <ul><li>Redis: ~100k simple ops/s per node. Postgres/MySQL: thousands to ~10k simple writes/s on a good node.</li>
@@ -96,9 +101,9 @@ notes:`<h3>Percentiles, not averages</h3>
 real:`Amazon found that small increases in page latency measurably cut sales, which is why big sites track p99 and set latency budgets per service.`,
 say:["\"I'll design for p99 under 200 ms, so the read path should avoid more than one DB round trip.\""],
 traps:["Quoting averages. Interviewers expect percentiles.","Assuming throughput and latency always move together: batching raises throughput but can raise latency."],
-src:[["Latency numbers (gist)","https://gist.github.com/jboner/2841832"]],
+src:[["Latency numbers by year (interactive)","https://colin-scott.github.io/personal_website/research/interactive_latency.html"],["Classic latency numbers (gist)","https://gist.github.com/jboner/2841832"]],
 quiz:[
-{q:"Which is fastest?",o:["Read 1 MB from SSD","Round trip within a data centre","Main memory reference","Disk seek"],a:2,why:"~100 ns, far faster than the others (0.5 ms, 1 ms, 10 ms)."},
+{q:"Which is fastest?",o:["Read 1 MB from SSD","Round trip within a data centre","Main memory reference","Disk seek"],a:2,why:"~100 ns, far faster than the others (a data-centre round trip is ~0.5 ms, 1 MB from an SSD ~0.05–0.2 ms, a disk seek ~5–10 ms)."},
 {q:"Why use p99 instead of average latency?",o:["It's easier to compute","Averages hide slow tail requests that users still feel","p99 is always lower","SLAs forbid averages"],a:1,why:"A good average can hide a terrible tail."},
 {q:"A service handles 500 req/s with 0.4 s average latency. Roughly how many requests are in flight (Little's Law)?",o:["125","200","1,250","2,000"],a:1,why:"L = λW = 500 × 0.4 = 200."}]});
 

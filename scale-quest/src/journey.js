@@ -7,11 +7,13 @@
 const {V,esc}=window.SQ;const S=()=>window.SQ.state;
 const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 
-const EXTRA_T={1:["what-is-sd","availability","latency"],4:["architecture","streaming"],5:["estimation","tradeoffs","ids-clocks"],7:["blob","special-db","prob-ds"],8:["dist-txn","consensus"],9:["lld-round"]};
-const EXTRA_P={3:["kv-store"],5:["unique-id"],6:["uber"],7:["youtube","web-crawler"],8:["leaderboard","ad-click"],9:["parking-lot-hld"]};
+const EXTRA_T={1:["what-is-sd","availability","latency"],2:["http-caching"],4:["security","deployment","architecture","streaming"],5:["estimation","tradeoffs","ids-clocks","cloud-map"],7:["blob","special-db","prob-ds"],8:["dist-txn","consensus"],9:["lld-round","concurrency"]};
+const EXTRA_P={3:["kv-store"],5:["unique-id"],6:["uber","food-delivery","google-docs"],7:["youtube","web-crawler","nearby"],8:["leaderboard","ad-click","checkout","hotel-booking"],9:["parking-lot-hld"]};
+const EXTRA_L={9:["k:lru","k:parking","k:vending","k:bucket","k:splitwise","k:eventbus"],3:["s:library","s:instagram","q:A"],4:["q:B"],6:["s:chat","s:ride"],7:["s:food-delivery","s:ecommerce","q:C"],8:["s:booking","s:ledger"]};
 const ROUTE_NAME={quiz:"Quiz blitz",gym:"Estimation gym",mock:"Mock interview",lld:"LLD dojo",board:"Whiteboard",cards:"Flashcards"};
-const KIND={lesson:"Lesson",mission:"Mission",boss:"Boss problem",practice:"Practice",check:"Checkpoint",side:"Side quest",bonus:"Bonus boss"};
+const KIND={lab:"Lab",lesson:"Lesson",mission:"Mission",boss:"Boss problem",practice:"Practice",check:"Checkpoint",side:"Side quest",bonus:"Bonus boss"};
 const ICON={
+  lab:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/>',
   lesson:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21a2 2 0 0 1 2-2h13"/>',
   mission:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/>',
   boss:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',
@@ -42,7 +44,9 @@ const LEVELS=[];const STAGES=[];
       st.levels.push(lv);
     });
     (EXTRA_T[w.n]||[]).forEach(id=>{const t=TOPICS.find(x=>x.id===id);if(!t||seenT.has(id))return;seenT.add(id);const lv={key:"t"+id,stage:w.n,type:"side",topic:id,title:t.title,desc:t.tldr.replace(/<[^>]+>/g,"")};st.levels.push(lv);});
-    (EXTRA_P[w.n]||[]).forEach(id=>{const p=PROBLEMS.find(x=>x.id===id);if(!p||seenP.has(id))return;seenP.add(id);const lv={key:"p"+id,stage:w.n,type:"bonus",prob:id,title:p.title,desc:p.pitch};st.levels.push(lv);});    if(w.n===1){const side=st.levels.filter(l=>l.type==="side");st.levels=st.levels.filter(l=>l.type!=="side");side.forEach(l=>l.type="lesson");st.levels.splice(1,0,...side);} // foundations right after Kickoff
+    (EXTRA_P[w.n]||[]).forEach(id=>{const p=PROBLEMS.find(x=>x.id===id);if(!p||seenP.has(id))return;seenP.add(id);const lv={key:"p"+id,stage:w.n,type:"bonus",prob:id,title:p.title,desc:p.pitch};st.levels.push(lv);});    (EXTRA_L[w.n]||[]).forEach(k=>{const [t,id]=k.split(":");if(t==="k"){const x=KATAS.find(s=>s.id===id);if(x)st.levels.push({key:"l"+k,stage:w.n,type:"lab",lab:k,kata:id,href:"#lld",title:"Code: "+x.title,desc:"Write it in Python and make the tests pass, right in your browser."});}
+      else if(t==="s"){const x=SCHEMAS.find(s=>s.id===id);if(x)st.levels.push({key:"l"+k,stage:w.n,type:"lab",lab:k,href:"#schema-"+id,title:"Schema: "+x.title,desc:x.prompt});}else{const x=SQL_SETS.find(s=>s.id===id);if(x)st.levels.push({key:"l"+k,stage:w.n,type:"lab",lab:k,href:"#sql-"+id,title:"SQL set "+id+": "+x.title,desc:"Write "+x.qs.length+" real queries against a food-delivery database that runs in your browser."});}});
+    if(w.n===1){const side=st.levels.filter(l=>l.type==="side");st.levels=st.levels.filter(l=>l.type!=="side");side.forEach(l=>l.type="lesson");st.levels.splice(1,0,...side);} // foundations right after Kickoff
     LEVELS.push(...st.levels);
   });
   // safety net: anything still unplaced goes to the last matching stage
@@ -57,6 +61,7 @@ function attempted(id){const pr=S().prob[id];return !!(pr&&pr.attempts);}
 function isDone(lv){
   if(lv.type==="lesson"||lv.type==="side")return !!S().topics[lv.topic]||(lv.day!=null&&!!S().plan[lv.day]);
   if(lv.type==="boss"||lv.type==="bonus")return attempted(lv.prob)||(lv.day!=null&&!!S().plan[lv.day]);
+  if(lv.type==="lab"){const [t,id]=lv.lab.split(":");return t==="k"?window.SQ.kataSolved(id):t==="s"?window.SQ.schemaSolved(id):window.SQ.sqlSetDone(id);}
   return !!S().plan[lv.day];
 }
 /* clearing a lesson also completes its planned day (for quests and the "Week Shipped" badge) */
@@ -80,7 +85,7 @@ V.path=function(el){
   <div class="card jstats"><div><b>${doneN}/${LEVELS.length}</b><span>levels done</span></div><div><b>${Object.keys(S().topics).length}/${TOPICS.length}</b><span>topics cleared</span></div><div class="bar" style="grid-column:1/-1"><i style="width:${doneN/LEVELS.length*100}%"></i></div></div></div>
   <div class="row" style="margin-bottom:12px">${cur?`<button class="btn primary" id="goCur">${doneN?"Continue":"Start"}: ${esc(cur.title)}</button>`:`<span class="tag easy">Every level complete</span>`}${todayLv&&todayLv!==cur?`<button class="btn" id="goToday">Today's plan: ${esc(todayLv.title)}</button>`:""}</div>
   <details class="card wworlds"><summary><b>World progress</b><span class="small muted">${WORLDS.filter(w=>TOPICS.filter(t=>t.w===w.n).every(t=>S().topics[t.id])).length}/${WORLDS.length} worlds cleared · lessons on the map carry their world's colour</span></summary><div class="wgrid">${worlds}</div></details>
-  <div class="legend">${["lesson","mission","boss","practice","check","side","bonus"].map(k=>`<span><i><svg viewBox="0 0 24 24">${ICON[k]}</svg></i>${KIND[k]}</span>`).join("")}</div>
+  <div class="legend">${["lesson","mission","boss","practice","lab","check","side","bonus"].map(k=>`<span><i><svg viewBox="0 0 24 24">${ICON[k]}</svg></i>${KIND[k]}</span>`).join("")}</div>
   ${PHASES_P.map((ph,phi)=>`<div class="act"><span>${esc(ph.name.split(" · ")[0])}</span><b>${esc(ph.name.split(" · ")[1]||ph.name)}</b><small>${esc(ph.weeks)}</small></div>`+STAGES.filter(s=>s.p===phi).map(s=>stageHTML(s,cur,pi,phi)).join("")).join("")}`;
   wire(el);
   if(cur&&scrolled!==window.SQ.today()&&doneN>0){scrolled=window.SQ.today();setTimeout(()=>{const n=$(`[data-k="${cur.key}"]`,el);if(n)n.scrollIntoView({block:"center",behavior:"smooth"});},60);}
@@ -103,6 +108,7 @@ function detailHTML(lv,d,wc){
   let main="",rule="";
   if(lv.type==="lesson"||lv.type==="side"){main=`<a class="btn primary" href="#topic-${t.id}">${S().topics[t.id]?"Revisit lesson":"Play lesson"}</a>`;rule=S().topics[t.id]?"Lesson cleared.":"Clear it by finishing the lesson's quiz (+50 XP). It then joins your review queue.";}
   else if(lv.type==="boss"||lv.type==="bonus"){main=`<a class="btn primary" href="#problem-${p.id}">${attempted(p.id)?"Fight again":"Fight the boss"}</a>`;rule=attempted(p.id)?`Beaten. Best score ${S().prob[p.id].best}/16.`:"Beat it by submitting one graded attempt (+100 XP + rubric).";}
+  else if(lv.type==="lab"){main=`<a class="btn primary" href="${lv.href}"${lv.kata?` data-kata-go="${lv.kata}"`:""}>Open the lab</a>`;rule=isDone(lv)?"Lab complete.":lv.lab.startsWith("k:")?"Make every test pass (+60 XP).":lv.lab.startsWith("s:")?"Draft the tables, compare with the model answer, and mark it solved (+40 XP).":"Solve every query in the set (+20 XP each).";}
   else if(lv.type==="practice"){main=`<a class="btn primary" href="#${lv.route}">Open ${ROUTE_NAME[lv.route]||lv.route}</a>`;rule="Do the practice, then mark the level complete.";}
   else if(t||p){main=`<a class="btn" href="${t?"#topic-"+t.id:"#problem-"+p.id}">Open ${esc(t?t.title:p.title)}</a>`;rule="Do the task, then mark the level complete.";}
   else rule="Do the task, then mark the level complete.";
@@ -119,6 +125,7 @@ function wire(el){
     if(!was){const lv=LEVELS.find(l=>l.day===i);const nx=LEVELS[LEVELS.indexOf(lv)+1];if(nx&&!isDone(nx))openKey=nx.key;}
     window.SQ.render();const k=openKey&&$(`[data-k="${openKey}"]`);if(k&&!was)k.scrollIntoView({block:"center",behavior:"smooth"});else window.scrollBy(0,0*y);});
   $$("[data-chest]",el).forEach(b=>b.onclick=()=>{const n=+b.dataset.chest;if(S().chests[n])return;S().chests[n]=window.SQ.today();window.SQ.addXP(100,`Stage ${n} chest`);window.SQ.confetti(120);window.SQ.modal(`<div class="eyebrow">Stage ${n} complete</div><h2>Chest opened: +100 XP</h2><p>${esc(STAGES[n-1].title)} is done. ${n<STAGES.length?`Stage ${n+1}: <b>${esc(STAGES[n].title)}</b> is next.`:"That was the final stage. You're interview-ready: keep the review queue and mocks going."}</p>`);window.SQ.render();});
+  $$("[data-kata-go]",el).forEach(a=>a.onclick=()=>{V.lld.tab="code";V.lld.kata=a.dataset.kataGo;});
   const gc=$("#goCur",el);if(gc)gc.onclick=()=>{const c=LEVELS.find(l=>!isDone(l));openKey=c.key;window.SQ.render();const n=$(`[data-k="${c.key}"]`);if(n)n.scrollIntoView({block:"center",behavior:"smooth"});};
   const gt=$("#goToday",el);if(gt)gt.onclick=()=>{const l=LEVELS.find(x=>x.day===window.SQ.planIndex());openKey=l.key;window.SQ.render();const n=$(`[data-k="${l.key}"]`);if(n)n.scrollIntoView({block:"center",behavior:"smooth"});};
 }

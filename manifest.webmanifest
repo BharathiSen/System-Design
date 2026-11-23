@@ -1,0 +1,15 @@
+{
+  "name": "Scale Quest: System Design",
+  "short_name": "Scale Quest",
+  "description": "A game-style path from zero to fresher system design interviews.",
+  "start_url": "scale-quest.html#home",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#0f8f85",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
