@@ -370,6 +370,51 @@ details.rv-plain p{margin:6px 0 0;line-height:1.5}
 .gl-item{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px}
 .gl-item dt{font-weight:800}.gl-item dd{margin:2px 0 0;font-size:.88rem;color:var(--muted)}
 .gl-item[hidden]{display:none}
+.wworlds{padding:0;margin-bottom:12px}.wworlds summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;padding:12px 14px}
+.wworlds summary::-webkit-details-marker{display:none}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;padding:0 14px 14px}
+.wprog{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.84rem}
+.wprog>span{width:26px;height:26px;border-radius:8px;background:var(--wc);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.8rem}
+.wprog b{display:block;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wprog .bar{height:6px;margin-top:3px}.wprog small{color:var(--muted);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:4px 0 8px;font-size:.78rem;color:var(--muted);font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:5px}.legend i{width:20px;height:20px;border-radius:50%;background:var(--panel-2);display:grid;place-items:center}
+.legend svg{width:12px;height:12px;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.act{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:30px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.act span{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}.act b{font-family:var(--f-display);font-size:1.3rem}.act small{color:var(--muted);margin-left:auto}
+.stage{margin:14px 0 6px}
+.stage-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 16px;border-radius:var(--r);background:linear-gradient(120deg,color-mix(in srgb,var(--sc) 20%,var(--panel)),var(--panel) 70%);border:1px solid color-mix(in srgb,var(--sc) 35%,var(--line))}
+.stage-head h2{font-size:1.15rem;margin:1px 0}.stage-head p{margin:0;font-size:.85rem;color:var(--muted)}
+.stage-head .sn{width:46px;height:46px;border-radius:14px;background:var(--sc);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.25rem;display:grid;place-items:center}
+.stage-head .sp{text-align:right;min-width:70px}.stage-head .sp b{font-variant-numeric:tabular-nums}.stage-head .sp .bar{height:6px;margin-top:4px}
+@media (max-width:560px){.stage-head{grid-template-columns:auto minmax(0,1fr)}.stage-head .sp{grid-column:1/-1;text-align:left}}
+.trailmap{position:relative;padding:18px 0 6px;overflow-x:clip}
+.trailmap::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:repeating-linear-gradient(var(--line-2) 0 8px,transparent 8px 16px);border-radius:2px}
+.lvrow{position:relative;display:flex;flex-direction:column;align-items:center;margin:4px 0 14px;transform:translateX(calc(var(--x) * min(130px,24vw)))}
+.lv{position:relative;width:64px;height:64px;border-radius:50%;border:4px solid var(--lc,var(--accent));background:var(--panel);cursor:pointer;display:grid;place-items:center;box-shadow:0 5px 0 color-mix(in srgb,var(--lc,var(--accent)) 55%,#000);transition:transform .1s;padding:0;color:var(--lc,var(--accent))}
+.lv:hover{transform:translateY(-2px)}.lv:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--lc,var(--accent)) 55%,#000)}
+.lv i{display:grid;place-items:center}.lv svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.lv.mission{--lc:var(--accent)}.lv.practice{--lc:var(--w6)}.lv.check{--lc:var(--muted)}
+.lv.boss,.lv.bonus{--lc:var(--w5);width:76px;height:76px;border-radius:22px}.lv.bonus{border-style:dashed}
+.lv.side{border-style:dashed}
+.lv.done{background:var(--lc,var(--accent));color:#fff}
+.lv.cur{animation:lvpulse 1.6s ease-in-out infinite}
+@keyframes lvpulse{0%,100%{outline:0 solid color-mix(in srgb,var(--lc,var(--accent)) 35%,transparent)}50%{outline:9px solid color-mix(in srgb,var(--lc,var(--accent)) 25%,transparent)}}
+@media (prefers-reduced-motion:reduce){.lv.cur{animation:none;outline:6px solid color-mix(in srgb,var(--lc,var(--accent)) 30%,transparent)}}
+.lv.open{outline:3px solid var(--ink);outline-offset:3px}
+.here{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:.7rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;padding:4px 9px;border-radius:8px}
+.here::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:var(--ink)}
+.lvl-lab{text-align:center;max-width:190px;margin-top:8px;background:var(--bg);padding:1px 6px;border-radius:6px;position:relative}
+.lvl-lab b{display:block;font-size:.84rem;line-height:1.25}.lvl-lab span{font-size:.72rem;color:var(--muted);font-weight:600}.lvl-lab em{font-style:normal;color:var(--flame);font-weight:800}
+.lvcard{position:relative;z-index:1;margin:0 auto 18px;max-width:560px;background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--lc);border-radius:var(--r);padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.lvcard h3{font-size:1.1rem;margin:8px 0 6px}.lvcard p{margin:4px 0}
+.chest{width:64px;height:56px;border:0;background:none;cursor:default;padding:0;filter:grayscale(1);opacity:.5}
+.chest svg{width:64px;height:54px}
+.chest.ready{filter:none;opacity:1;cursor:pointer;animation:chestwob 1.4s ease-in-out infinite}
+.chest.opened{filter:none;opacity:1}
+@keyframes chestwob{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
+.jstats{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;min-width:220px}
+.jstats b{font-family:var(--f-display);font-size:1.4rem;font-weight:800;display:block;line-height:1.1}.jstats span{font-size:.76rem;color:var(--muted);font-weight:600}
 </style>
 </head><body>
 
@@ -2120,7 +2165,7 @@ const QUEST_POOL={
   gym:{t:"Solve 3 estimation drills",n:3,href:"#gym"},
   problem:{t:"Attempt 1 design problem or mock",n:1,href:"#arena"},
   board:{t:"Save 1 whiteboard diagram",n:1,href:"#board"},
-  plan:{t:"Tick today's planner task",n:1,href:"#plan"}
+  plan:{t:"Tick today's Learn path task",n:1,href:"#path"}
 };
 function questsToday(){
   const r=rng(hash(today()));const keys=shuffle(["topic","quiz","cards","gym","problem","board"],r).slice(0,2);
@@ -2188,7 +2233,7 @@ const BADGES=[
   {id:"b1",n:"First Sketch",d:"Save a whiteboard diagram",g:"✎",tier:"b",t:()=>S.stats.boardsSaved>=1},
   {id:"b10",n:"Diagram Artist",d:"Save 10 whiteboard diagrams",g:"✎10",tier:"g",t:()=>S.stats.boardsSaved>=10},
   {id:"lld5",n:"Class Act",d:"Finish 5 LLD problems",g:"LLD",tier:"s",t:()=>Object.keys(S.lld).length>=5},
-  {id:"week",n:"Week Shipped",d:"Tick all 7 days of a planner week",g:"7d",tier:"s",t:()=>WEEKS.some((w,i)=>w.days.every((_,j)=>S.plan[i*7+j]))},
+  {id:"week",n:"Week Shipped",d:"Tick all 7 days of a stage in the Learn path",g:"7d",tier:"s",t:()=>WEEKS.some((w,i)=>w.days.every((_,j)=>S.plan[i*7+j]))},
   {id:"rv1",n:"Recall Ready",d:"Pass your first spaced review",g:"R",tier:"b",t:()=>S.stats.revPass>=1},
   {id:"rv25",n:"Long-Term Storage",d:"Pass 25 spaced reviews",g:"R25",tier:"s",t:()=>S.stats.revPass>=25},
   {id:"rvm",n:"Persisted to Disk",d:"A topic survives its 35-day review",g:"35d",tier:"g",t:()=>Object.values(S.srs).some(r=>r.done)},
@@ -2279,7 +2324,7 @@ const ICONS={
   review:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
   library:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>'
 };
-const NAV=[["home","Home"],["path","Learn path"],["revise","Fast revision"],["review","Review queue"],["arena","Design arena"],["practice","Practice gym"],["board","Whiteboard"],["lld","LLD dojo"],["plan","My 14-week plan"],["trophies","Trophies"],["library","Library"]];
+const NAV=[["home","Home"],["path","Learn path"],["revise","Fast revision"],["review","Review queue"],["arena","Design arena"],["practice","Practice gym"],["board","Whiteboard"],["lld","LLD dojo"],["trophies","Trophies"],["library","Library"]];
 const TABS=[["home","Home"],["path","Learn"],["arena","Arena"],["review","Review"],["practice","Gym"],["trophies","Me"]];
 const svgI=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
 function sectionOf(r){if(r.startsWith("topic-"))return"path";if(r.startsWith("problem-"))return"arena";if(["quiz","cards","gym","mock","scores"].includes(r))return"practice";return r;}
@@ -2320,7 +2365,7 @@ function planIndex(k=today()){return Math.round((dateOf(k)-dateOf(PLAN_START))/D
 V.home=function(el){
   const st=streakInfo(),tx=S.log[today()]||0,pct=Math.min(1,tx/S.goal);const C=2*Math.PI*40;
   const L=levelOf(S.xp);
-  const next=TOPICS.find(t=>!S.topics[t.id]);
+  const next=(window.SQ.PATH_TOPICS||TOPICS).find(t=>!S.topics[t.id]);
   const pi=planIndex();const wk=Math.floor(pi/7),dd=pi%7;const plan=(pi>=0&&WEEKS[wk])?WEEKS[wk].days[dd]:null;
   const qs=questsToday();const c=dayC();
   // week dots (Mon..Sun of this week)
@@ -2355,7 +2400,7 @@ V.home=function(el){
     <section class="card"><div class="sect" style="margin:0 0 6px"><h2>Daily quests</h2><span class="tag ${c.bonus?"easy":""}">${c.bonus?"Bonus claimed":"+75 XP bonus"}</span></div>
       ${qs.map((k,i)=>{const q=QUEST_POOL[k];const v=Math.min(c[k],q.n);const ok=v>=q.n;return `<a class="quest ${ok?"done":""}" href="${q.href}" style="text-decoration:none;color:inherit"><span class="qi">${ok?"✓":i+1}</span><span><b>${q.t}</b><span class="bar gold" style="display:block;margin-top:5px"><i style="width:${v/q.n*100}%"></i></span></span><span class="small muted" style="font-variant-numeric:tabular-nums">${v}/${q.n}</span></a>`;}).join("")}
     </section>
-    <section class="card"><div class="sect" style="margin:0 0 6px"><h2>Today in your plan</h2><a class="small" href="#plan">Open plan</a></div>
+    <section class="card"><div class="sect" style="margin:0 0 6px"><h2>Today in your Learn path</h2><a class="small" href="#path">Open path</a></div>
       ${plan?`<div class="eyebrow">Week ${wk+1} · Day ${dd+1} · ${esc(WEEKS[wk].title)}</div><h3 style="font-size:1.1rem;margin:6px 0 4px">${esc(plan.t)}</h3><p class="small" style="margin:0 0 10px">${esc(plan.d)}</p><div class="row"><button class="btn ${S.plan[pi]?"":"gold"} sm" id="tickToday">${S.plan[pi]?"Done ✓ (untick)":"Mark done +30 XP"}</button>${plan.u?`<a class="btn sm" href="${plan.u}" target="_blank" rel="noopener">${esc(plan.s||"Resource")} ↗</a>`:""}</div>`:pi<0?`<p class="muted">Your plan starts on ${dateOf(PLAN_START).toDateString()}.</p>`:`<p class="muted">You finished the 14-week plan. Keep the streak with mocks and revision.</p>`}
     </section>
   </div>
@@ -2372,12 +2417,12 @@ V.home=function(el){
 };
 function togglePlan(i){
   if(S.plan[i]){delete S.plan[i];save();toast("Unticked");return;}
-  S.plan[i]=today();if(i===planIndex())bump("plan");addXP(30,"Planner task done");
+  S.plan[i]=today();if(i===planIndex())bump("plan");addXP(30,"Learn path level done");
 }
 
 /* Learn path */
 V.path=function(el){
-  const next=TOPICS.find(t=>!S.topics[t.id]);
+  const next=(window.SQ.PATH_TOPICS||TOPICS).find(t=>!S.topics[t.id]);
   el.innerHTML=`<div class="page-head"><div><div class="eyebrow">Learn path</div><h1>From zero to offer</h1><p>${WORLDS.length} worlds, ${TOPICS.length} topics. Each node is a 10–20 minute lesson with notes, a diagram where it helps, real-world examples, interview traps and a quiz. Clear a node for +50 XP.</p></div><a class="btn primary" href="#topic-${(next||TOPICS[0]).id}">${next?"Next lesson":"Revise from the start"}</a></div>`+
   WORLDS.map(w=>{const ts=TOPICS.filter(t=>t.w===w.n);const d=ts.filter(t=>S.topics[t.id]).length;
     return `<section class="world" style="--wc:${w.c}"><div class="world-head"><div class="wn">${w.n}</div><div><h2>${esc(w.name)}</h2><p>${esc(w.blurb)}</p></div><div class="wp">${d}/${ts.length}<div class="bar" style="margin-top:4px"><i style="width:${d/ts.length*100}%;background:${w.c}"></i></div></div></div>
@@ -2409,7 +2454,7 @@ V.topic=function(el,id){
    <div class="row" style="justify-content:space-between;margin-top:16px">${prev?`<a class="btn ghost" href="#topic-${prev.id}">← ${esc(prev.title)}</a>`:"<span></span>"}${nxt?`<a class="btn" href="#topic-${nxt.id}">${esc(nxt.title)} →</a>`:""}</div></div>`;
   wireQuiz($("#tq"),t.quiz,"t:"+t.id+":",()=>{const b=$("#clearBtn");b.disabled=false;if(!done)$("#clearHint").textContent="Quiz finished. Claim your clear.";});
   $("#clearBtn").onclick=()=>{
-    if(!S.topics[t.id]){S.topics[t.id]=today();srsEnroll(t.id);bump("topic");toast("Added to your review queue: back tomorrow");addXP(50,`Cleared ${t.title}`);confetti(70);
+    if(!S.topics[t.id]){S.topics[t.id]=today();srsEnroll(t.id);if(window.SQ.onTopicClear)window.SQ.onTopicClear(t.id);bump("topic");toast("Added to your review queue: back tomorrow");addXP(50,`Cleared ${t.title}`);confetti(70);
       if(worldDone(t.w))modal(`<div class="eyebrow">World ${w.n} cleared</div><h2>${esc(w.badge)}</h2><p>You finished <b>${esc(w.name)}</b>. Badge unlocked.</p>`);
       render();}
     else{const k=t.id+today();if(S.revised[k]){toast("Already revised today");return;}S.revised[k]=1;bump("topic");addXP(10,"Topic revised");}
@@ -2819,6 +2864,148 @@ function runSession(el){
       window.SQ.render();};
   }
 }
+})();
+
+/* ===== Learn path: ONE game map (14-week plan + every topic + every problem) =====
+   Each plan day is a level. A topic lesson appears once, at the first day that teaches it;
+   later days that revisit it are "missions" with their own task. Topics and problems the
+   plan never names are added as side quests / bonus bosses in the week they fit. */
+(function(){
+"use strict";
+const {V,esc}=window.SQ;const S=()=>window.SQ.state;
+const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+
+const EXTRA_T={1:["what-is-sd","availability","latency"],4:["architecture","streaming"],5:["estimation","tradeoffs","ids-clocks"],7:["blob","special-db","prob-ds"],8:["dist-txn","consensus"],9:["lld-round"]};
+const EXTRA_P={3:["kv-store"],5:["unique-id"],6:["uber"],7:["youtube","web-crawler"],8:["leaderboard","ad-click"],9:["parking-lot-hld"]};
+const ROUTE_NAME={quiz:"Quiz blitz",gym:"Estimation gym",mock:"Mock interview",lld:"LLD dojo",board:"Whiteboard",cards:"Flashcards"};
+const KIND={lesson:"Lesson",mission:"Mission",boss:"Boss problem",practice:"Practice",check:"Checkpoint",side:"Side quest",bonus:"Bonus boss"};
+const ICON={
+  lesson:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21a2 2 0 0 1 2-2h13"/>',
+  mission:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8"/>',
+  boss:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',
+  practice:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
+  check:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  side:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  bonus:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',
+  done:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+};
+const ZIG=[0,.55,.9,.55,0,-.55,-.9,-.55];
+
+/* ---------- build the level list once ---------- */
+const LEVELS=[];const STAGES=[];
+(function build(){
+  const seenT=new Set(),seenP=new Set();
+  WEEKS.forEach((w,wi)=>{
+    const st={n:w.n,wi,title:w.title,goal:w.goal,p:w.p,levels:[]};STAGES.push(st);
+    w.days.forEach((d,j)=>{
+      const i=wi*7+j,link=PLAN_LINKS[i]||"";let lv={key:"d"+i,day:i,stage:w.n,title:d.t,desc:d.d,u:d.u,s:d.s,link};
+      if(link.startsWith("topic-")){const id=link.slice(6);const t=TOPICS.find(x=>x.id===id);
+        if(t&&!seenT.has(id)){seenT.add(id);Object.assign(lv,{type:"lesson",topic:id,title:t.title,task:d.t});}
+        else Object.assign(lv,{type:"mission",topic:id});}
+      else if(link.startsWith("problem-")){const id=link.slice(8);
+        if(!seenP.has(id)){seenP.add(id);Object.assign(lv,{type:"boss",prob:id,title:PROBLEMS.find(p=>p.id===id).title,task:d.t});}
+        else Object.assign(lv,{type:"mission",prob:id});}
+      else if(link)Object.assign(lv,{type:"practice",route:link});
+      else lv.type=/review|buffer|fix the gaps|polish/i.test(d.t)?"check":"mission";
+      st.levels.push(lv);
+    });
+    (EXTRA_T[w.n]||[]).forEach(id=>{const t=TOPICS.find(x=>x.id===id);if(!t||seenT.has(id))return;seenT.add(id);const lv={key:"t"+id,stage:w.n,type:"side",topic:id,title:t.title,desc:t.tldr.replace(/<[^>]+>/g,"")};st.levels.push(lv);});
+    (EXTRA_P[w.n]||[]).forEach(id=>{const p=PROBLEMS.find(x=>x.id===id);if(!p||seenP.has(id))return;seenP.add(id);const lv={key:"p"+id,stage:w.n,type:"bonus",prob:id,title:p.title,desc:p.pitch};st.levels.push(lv);});    if(w.n===1){const side=st.levels.filter(l=>l.type==="side");st.levels=st.levels.filter(l=>l.type!=="side");side.forEach(l=>l.type="lesson");st.levels.splice(1,0,...side);} // foundations right after Kickoff
+    LEVELS.push(...st.levels);
+  });
+  // safety net: anything still unplaced goes to the last matching stage
+  TOPICS.forEach(t=>{if(!seenT.has(t.id)){const st=STAGES[STAGES.length-1];const lv={key:"t"+t.id,stage:st.n,type:"side",topic:t.id,title:t.title,desc:t.tldr.replace(/<[^>]+>/g,"")};st.levels.push(lv);LEVELS.push(lv);}});
+  PROBLEMS.forEach(p=>{if(!seenP.has(p.id)){const st=STAGES[STAGES.length-1];const lv={key:"p"+p.id,stage:st.n,type:"bonus",prob:p.id,title:p.title,desc:p.pitch};st.levels.push(lv);LEVELS.push(lv);}});
+  // LEVELS must follow stage order (extras were pushed inside each stage loop, so it already does)
+})();
+window.SQ.PATH_TOPICS=LEVELS.filter(l=>l.type==="lesson"||l.type==="side").map(l=>TOPICS.find(t=>t.id===l.topic));
+window.SQ.LEVELS=LEVELS;
+
+function attempted(id){const pr=S().prob[id];return !!(pr&&pr.attempts);}
+function isDone(lv){
+  if(lv.type==="lesson"||lv.type==="side")return !!S().topics[lv.topic]||(lv.day!=null&&!!S().plan[lv.day]);
+  if(lv.type==="boss"||lv.type==="bonus")return attempted(lv.prob)||(lv.day!=null&&!!S().plan[lv.day]);
+  return !!S().plan[lv.day];
+}
+/* clearing a lesson also completes its planned day (for quests and the "Week Shipped" badge) */
+window.SQ.onTopicClear=function(id){
+  LEVELS.filter(l=>l.type==="lesson"&&l.topic===id&&l.day!=null&&!S().plan[l.day]).forEach(l=>{S().plan[l.day]=window.SQ.today();if(l.day===window.SQ.planIndex())window.SQ.bump("plan");});
+  window.SQ.save();
+};
+function syncPlan(){let ch=false;LEVELS.forEach(l=>{if(l.day!=null&&!S().plan[l.day]&&((l.topic&&l.type==="lesson"&&S().topics[l.topic])||(l.type==="boss"&&attempted(l.prob)))){S().plan[l.day]=S().topics[l.topic]||window.SQ.today();ch=true;}});if(ch)window.SQ.save();}
+
+const fmt=k=>window.SQ.dateOf(k).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
+let openKey=null,scrolled="";
+
+V.path=function(el){
+  syncPlan();if(!S().chests)S().chests={};
+  const pi=window.SQ.planIndex();
+  const doneN=LEVELS.filter(isDone).length;const cur=LEVELS.find(l=>!isDone(l));
+  const todayLv=LEVELS.find(l=>l.day===pi);
+  if(openKey===null&&cur)openKey=cur.key;
+  const worlds=WORLDS.map(w=>{const ts=TOPICS.filter(t=>t.w===w.n);const d=ts.filter(t=>S().topics[t.id]).length;return `<div class="wprog" style="--wc:${w.c}" title="${esc(w.name)}: ${d}/${ts.length} topics"><span>${w.n}</span><div><b>${esc(w.name)}</b><div class="bar"><i style="width:${d/ts.length*100}%;background:${w.c}"></i></div></div><small>${d}/${ts.length}</small></div>`;}).join("");
+  el.innerHTML=`<div class="page-head"><div><div class="eyebrow">Learn path · one map, 14 stages</div><h1>From zero to offer</h1><p>Your 14-week plan and all ${TOPICS.length} topics and ${PROBLEMS.length} problems on one trail of ${LEVELS.length} levels, from ${fmt(window.SQ.PLAN_START)} to ${fmt(window.SQ.addDays(window.SQ.PLAN_START,WEEKS.length*7-1))}. Tap a level to play it. Finish every level in a stage to open its chest.</p></div>
+  <div class="card jstats"><div><b>${doneN}/${LEVELS.length}</b><span>levels done</span></div><div><b>${Object.keys(S().topics).length}/${TOPICS.length}</b><span>topics cleared</span></div><div class="bar" style="grid-column:1/-1"><i style="width:${doneN/LEVELS.length*100}%"></i></div></div></div>
+  <div class="row" style="margin-bottom:12px">${cur?`<button class="btn primary" id="goCur">${doneN?"Continue":"Start"}: ${esc(cur.title)}</button>`:`<span class="tag easy">Every level complete</span>`}${todayLv&&todayLv!==cur?`<button class="btn" id="goToday">Today's plan: ${esc(todayLv.title)}</button>`:""}</div>
+  <details class="card wworlds"><summary><b>World progress</b><span class="small muted">${WORLDS.filter(w=>TOPICS.filter(t=>t.w===w.n).every(t=>S().topics[t.id])).length}/${WORLDS.length} worlds cleared · lessons on the map carry their world's colour</span></summary><div class="wgrid">${worlds}</div></details>
+  <div class="legend">${["lesson","mission","boss","practice","check","side","bonus"].map(k=>`<span><i><svg viewBox="0 0 24 24">${ICON[k]}</svg></i>${KIND[k]}</span>`).join("")}</div>
+  ${PHASES_P.map((ph,phi)=>`<div class="act"><span>${esc(ph.name.split(" · ")[0])}</span><b>${esc(ph.name.split(" · ")[1]||ph.name)}</b><small>${esc(ph.weeks)}</small></div>`+STAGES.filter(s=>s.p===phi).map(s=>stageHTML(s,cur,pi,phi)).join("")).join("")}`;
+  wire(el);
+  if(cur&&scrolled!==window.SQ.today()&&doneN>0){scrolled=window.SQ.today();setTimeout(()=>{const n=$(`[data-k="${cur.key}"]`,el);if(n)n.scrollIntoView({block:"center",behavior:"smooth"});},60);}
+};
+
+function stageHTML(s,cur,pi,phi){
+  const dn=s.levels.filter(isDone).length,all=dn===s.levels.length;const chest=S().chests[s.n];
+  const sc=`var(--w${phi+1})`;
+  let k=0;
+  return `<section class="stage" style="--sc:${sc}"><div class="stage-head"><span class="sn">${s.n}</span><div><div class="eyebrow">Stage ${s.n} · Week ${s.n}</div><h2>${esc(s.title)}</h2><p>${esc(s.goal)}</p></div><div class="sp"><b>${dn}/${s.levels.length}</b><div class="bar"><i style="width:${dn/s.levels.length*100}%;background:${sc}"></i></div></div></div>
+  <div class="trailmap">${s.levels.map(lv=>{const d=isDone(lv),c=cur&&cur.key===lv.key,o=openKey===lv.key;const t=lv.topic&&TOPICS.find(x=>x.id===lv.topic);const wc=t?WORLDS.find(w=>w.n===t.w).c:sc;const x=ZIG[(k++)%ZIG.length];
+    return `<div class="lvrow" style="--x:${x}"><button class="lv ${lv.type} ${d?"done":""} ${c?"cur":""} ${o?"open":""}" data-k="${lv.key}" style="--lc:${wc}" aria-expanded="${o}" aria-label="${KIND[lv.type]}: ${esc(lv.title)}${d?" (done)":""}">${c?`<span class="here">${isDone(LEVELS[0])||LEVELS.indexOf(lv)?"You are here":"Start here"}</span>`:""}<i><svg viewBox="0 0 24 24">${d?ICON.done:ICON[lv.type]}</svg></i></button><div class="lvl-lab"><b>${esc(lv.title)}</b><span>${KIND[lv.type]}${lv.day!=null?` · Day ${lv.day%7+1}`:""}${lv.day===pi?' · <em>Today</em>':""}</span></div></div>${o?detailHTML(lv,d,wc):""}`;}).join("")}
+  <div class="lvrow" style="--x:0"><button class="chest ${all?(chest?"opened":"ready"):""}" data-chest="${s.n}" ${all&&!chest?"":"disabled"} aria-label="Stage ${s.n} chest">${chestSvg(all&&chest)}</button><div class="lvl-lab"><b>${chest?"Chest opened":all?"Open your chest! +100 XP":"Stage chest"}</b><span>${chest?"Opened "+chest:all?"Stage complete":`${s.levels.length-dn} level${s.levels.length-dn===1?"":"s"} to go`}</span></div></div></div></section>`;
+}
+function chestSvg(open){return `<svg viewBox="0 0 48 40" aria-hidden="true"><rect x="5" y="${open?17:15}" width="38" height="21" rx="3" style="fill:var(--xp)"/><path d="${open?"M5 15 L9 3 H39 L43 15Z":"M5 16 Q5 4 24 4 Q43 4 43 16Z"}" style="fill:color-mix(in srgb,var(--xp) 75%,#000)"/><rect x="20" y="${open?20:13}" width="8" height="9" rx="2" style="fill:#fff8dc"/></svg>`;}
+
+function detailHTML(lv,d,wc){
+  const t=lv.topic&&TOPICS.find(x=>x.id===lv.topic);const p=lv.prob&&PROBLEMS.find(x=>x.id===lv.prob);
+  const date=lv.day!=null?fmt(window.SQ.addDays(window.SQ.PLAN_START,lv.day)):"";
+  let main="",rule="";
+  if(lv.type==="lesson"||lv.type==="side"){main=`<a class="btn primary" href="#topic-${t.id}">${S().topics[t.id]?"Revisit lesson":"Play lesson"}</a>`;rule=S().topics[t.id]?"Lesson cleared.":"Clear it by finishing the lesson's quiz (+50 XP). It then joins your review queue.";}
+  else if(lv.type==="boss"||lv.type==="bonus"){main=`<a class="btn primary" href="#problem-${p.id}">${attempted(p.id)?"Fight again":"Fight the boss"}</a>`;rule=attempted(p.id)?`Beaten. Best score ${S().prob[p.id].best}/16.`:"Beat it by submitting one graded attempt (+100 XP + rubric).";}
+  else if(lv.type==="practice"){main=`<a class="btn primary" href="#${lv.route}">Open ${ROUTE_NAME[lv.route]||lv.route}</a>`;rule="Do the practice, then mark the level complete.";}
+  else if(t||p){main=`<a class="btn" href="${t?"#topic-"+t.id:"#problem-"+p.id}">Open ${esc(t?t.title:p.title)}</a>`;rule="Do the task, then mark the level complete.";}
+  else rule="Do the task, then mark the level complete.";
+  const tick=lv.day!=null&&!(d&&!S().plan[lv.day])?`<button class="btn ${S().plan[lv.day]?"":"gold"}" data-tick="${lv.day}">${S().plan[lv.day]?"Completed ✓ (undo)":"Mark complete +30 XP"}</button>`:"";
+  return `<div class="lvcard" style="--lc:${wc}"><div class="row" style="gap:6px"><span class="tag" style="background:var(--lc);color:#fff">${KIND[lv.type]}</span>${t?`<span class="tag">World ${t.w} · ${esc(WORLDS.find(w=>w.n===t.w).name)}</span><span class="tag">${t.mins} min</span>`:""}${p?`<span class="tag ${p.diff.toLowerCase()}">${p.diff}</span>`:""}${date?`<span class="tag">${date}</span>`:""}</div>
+  <h3>${esc(lv.title)}</h3>${lv.task&&lv.task!==lv.title?`<div class="small muted" style="margin-top:-4px">Plan task: ${esc(lv.task)}</div>`:""}
+  <p>${esc(lv.desc||"")}</p>${lv.u?`<p class="small"><a href="${lv.u}" target="_blank" rel="noopener">${esc(lv.s||"Resource")} ↗</a></p>`:""}
+  <p class="small muted">${rule}</p><div class="row">${main}${tick}</div></div>`;
+}
+
+function wire(el){
+  $$(".lv",el).forEach(b=>b.onclick=()=>{openKey=openKey===b.dataset.k?"":b.dataset.k;const y=b.getBoundingClientRect().top;window.SQ.render();const nb=$(`[data-k="${b.dataset.k}"]`);if(nb)window.scrollBy(0,nb.getBoundingClientRect().top-y);});
+  $$("[data-tick]",el).forEach(b=>b.onclick=()=>{const i=+b.dataset.tick;const y=b.getBoundingClientRect().top;const was=!!S().plan[i];window.SQ.togglePlan(i);
+    if(!was){const lv=LEVELS.find(l=>l.day===i);const nx=LEVELS[LEVELS.indexOf(lv)+1];if(nx&&!isDone(nx))openKey=nx.key;}
+    window.SQ.render();const k=openKey&&$(`[data-k="${openKey}"]`);if(k&&!was)k.scrollIntoView({block:"center",behavior:"smooth"});else window.scrollBy(0,0*y);});
+  $$("[data-chest]",el).forEach(b=>b.onclick=()=>{const n=+b.dataset.chest;if(S().chests[n])return;S().chests[n]=window.SQ.today();window.SQ.addXP(100,`Stage ${n} chest`);window.SQ.confetti(120);window.SQ.modal(`<div class="eyebrow">Stage ${n} complete</div><h2>Chest opened: +100 XP</h2><p>${esc(STAGES[n-1].title)} is done. ${n<STAGES.length?`Stage ${n+1}: <b>${esc(STAGES[n].title)}</b> is next.`:"That was the final stage. You're interview-ready: keep the review queue and mocks going."}</p>`);window.SQ.render();});
+  const gc=$("#goCur",el);if(gc)gc.onclick=()=>{const c=LEVELS.find(l=>!isDone(l));openKey=c.key;window.SQ.render();const n=$(`[data-k="${c.key}"]`);if(n)n.scrollIntoView({block:"center",behavior:"smooth"});};
+  const gt=$("#goToday",el);if(gt)gt.onclick=()=>{const l=LEVELS.find(x=>x.day===window.SQ.planIndex());openKey=l.key;window.SQ.render();const n=$(`[data-k="${l.key}"]`);if(n)n.scrollIntoView({block:"center",behavior:"smooth"});};
+}
+
+/* topic pages: previous / next follow the path order */
+const origTopic=V.topic;
+V.topic=function(el,id){
+  origTopic(el,id);
+  const order=window.SQ.PATH_TOPICS;const i=order.findIndex(t=>t.id===id);if(i<0)return;
+  const rows=$$(".row",el);const last=rows[rows.length-1];if(!last)return;
+  const prev=order[i-1],nxt=order[i+1];
+  last.innerHTML=`${prev?`<a class="btn ghost" href="#topic-${prev.id}">← ${esc(prev.title)}</a>`:`<a class="btn ghost" href="#path">← Learn path</a>`}${nxt?`<a class="btn" href="#topic-${nxt.id}">Next lesson: ${esc(nxt.title)} →</a>`:""}`;
+};
+
+/* chest badge */
+window.SQ.BADGES.push({id:"chest1",n:"Loot Found",d:"Open your first stage chest",g:"▣",tier:"b",t:()=>Object.keys(S().chests||{}).length>=1},{id:"chestall",n:"Treasure Hunter",d:"Open all 14 stage chests",g:"14",tier:"g",t:()=>Object.keys(S().chests||{}).length>=14});
+
+/* the separate planner page is gone: old links land on the Learn path */
+V.plan=function(){location.replace("#path");};
 })();
 
 /* ===== Beginner layer: plain-English intros, new words, problem briefs =====

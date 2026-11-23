@@ -66,7 +66,7 @@ const QUEST_POOL={
   gym:{t:"Solve 3 estimation drills",n:3,href:"#gym"},
   problem:{t:"Attempt 1 design problem or mock",n:1,href:"#arena"},
   board:{t:"Save 1 whiteboard diagram",n:1,href:"#board"},
-  plan:{t:"Tick today's planner task",n:1,href:"#plan"}
+  plan:{t:"Tick today's Learn path task",n:1,href:"#path"}
 };
 function questsToday(){
   const r=rng(hash(today()));const keys=shuffle(["topic","quiz","cards","gym","problem","board"],r).slice(0,2);
@@ -134,7 +134,7 @@ const BADGES=[
   {id:"b1",n:"First Sketch",d:"Save a whiteboard diagram",g:"✎",tier:"b",t:()=>S.stats.boardsSaved>=1},
   {id:"b10",n:"Diagram Artist",d:"Save 10 whiteboard diagrams",g:"✎10",tier:"g",t:()=>S.stats.boardsSaved>=10},
   {id:"lld5",n:"Class Act",d:"Finish 5 LLD problems",g:"LLD",tier:"s",t:()=>Object.keys(S.lld).length>=5},
-  {id:"week",n:"Week Shipped",d:"Tick all 7 days of a planner week",g:"7d",tier:"s",t:()=>WEEKS.some((w,i)=>w.days.every((_,j)=>S.plan[i*7+j]))},
+  {id:"week",n:"Week Shipped",d:"Tick all 7 days of a stage in the Learn path",g:"7d",tier:"s",t:()=>WEEKS.some((w,i)=>w.days.every((_,j)=>S.plan[i*7+j]))},
   {id:"rv1",n:"Recall Ready",d:"Pass your first spaced review",g:"R",tier:"b",t:()=>S.stats.revPass>=1},
   {id:"rv25",n:"Long-Term Storage",d:"Pass 25 spaced reviews",g:"R25",tier:"s",t:()=>S.stats.revPass>=25},
   {id:"rvm",n:"Persisted to Disk",d:"A topic survives its 35-day review",g:"35d",tier:"g",t:()=>Object.values(S.srs).some(r=>r.done)},
@@ -225,7 +225,7 @@ const ICONS={
   review:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
   library:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>'
 };
-const NAV=[["home","Home"],["path","Learn path"],["revise","Fast revision"],["review","Review queue"],["arena","Design arena"],["practice","Practice gym"],["board","Whiteboard"],["lld","LLD dojo"],["plan","My 14-week plan"],["trophies","Trophies"],["library","Library"]];
+const NAV=[["home","Home"],["path","Learn path"],["revise","Fast revision"],["review","Review queue"],["arena","Design arena"],["practice","Practice gym"],["board","Whiteboard"],["lld","LLD dojo"],["trophies","Trophies"],["library","Library"]];
 const TABS=[["home","Home"],["path","Learn"],["arena","Arena"],["review","Review"],["practice","Gym"],["trophies","Me"]];
 const svgI=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
 function sectionOf(r){if(r.startsWith("topic-"))return"path";if(r.startsWith("problem-"))return"arena";if(["quiz","cards","gym","mock","scores"].includes(r))return"practice";return r;}
@@ -266,7 +266,7 @@ function planIndex(k=today()){return Math.round((dateOf(k)-dateOf(PLAN_START))/D
 V.home=function(el){
   const st=streakInfo(),tx=S.log[today()]||0,pct=Math.min(1,tx/S.goal);const C=2*Math.PI*40;
   const L=levelOf(S.xp);
-  const next=TOPICS.find(t=>!S.topics[t.id]);
+  const next=(window.SQ.PATH_TOPICS||TOPICS).find(t=>!S.topics[t.id]);
   const pi=planIndex();const wk=Math.floor(pi/7),dd=pi%7;const plan=(pi>=0&&WEEKS[wk])?WEEKS[wk].days[dd]:null;
   const qs=questsToday();const c=dayC();
   // week dots (Mon..Sun of this week)
@@ -301,7 +301,7 @@ V.home=function(el){
     <section class="card"><div class="sect" style="margin:0 0 6px"><h2>Daily quests</h2><span class="tag ${c.bonus?"easy":""}">${c.bonus?"Bonus claimed":"+75 XP bonus"}</span></div>
       ${qs.map((k,i)=>{const q=QUEST_POOL[k];const v=Math.min(c[k],q.n);const ok=v>=q.n;return `<a class="quest ${ok?"done":""}" href="${q.href}" style="text-decoration:none;color:inherit"><span class="qi">${ok?"✓":i+1}</span><span><b>${q.t}</b><span class="bar gold" style="display:block;margin-top:5px"><i style="width:${v/q.n*100}%"></i></span></span><span class="small muted" style="font-variant-numeric:tabular-nums">${v}/${q.n}</span></a>`;}).join("")}
     </section>
-    <section class="card"><div class="sect" style="margin:0 0 6px"><h2>Today in your plan</h2><a class="small" href="#plan">Open plan</a></div>
+    <section class="card"><div class="sect" style="margin:0 0 6px"><h2>Today in your Learn path</h2><a class="small" href="#path">Open path</a></div>
       ${plan?`<div class="eyebrow">Week ${wk+1} · Day ${dd+1} · ${esc(WEEKS[wk].title)}</div><h3 style="font-size:1.1rem;margin:6px 0 4px">${esc(plan.t)}</h3><p class="small" style="margin:0 0 10px">${esc(plan.d)}</p><div class="row"><button class="btn ${S.plan[pi]?"":"gold"} sm" id="tickToday">${S.plan[pi]?"Done ✓ (untick)":"Mark done +30 XP"}</button>${plan.u?`<a class="btn sm" href="${plan.u}" target="_blank" rel="noopener">${esc(plan.s||"Resource")} ↗</a>`:""}</div>`:pi<0?`<p class="muted">Your plan starts on ${dateOf(PLAN_START).toDateString()}.</p>`:`<p class="muted">You finished the 14-week plan. Keep the streak with mocks and revision.</p>`}
     </section>
   </div>
@@ -318,12 +318,12 @@ V.home=function(el){
 };
 function togglePlan(i){
   if(S.plan[i]){delete S.plan[i];save();toast("Unticked");return;}
-  S.plan[i]=today();if(i===planIndex())bump("plan");addXP(30,"Planner task done");
+  S.plan[i]=today();if(i===planIndex())bump("plan");addXP(30,"Learn path level done");
 }
 
 /* Learn path */
 V.path=function(el){
-  const next=TOPICS.find(t=>!S.topics[t.id]);
+  const next=(window.SQ.PATH_TOPICS||TOPICS).find(t=>!S.topics[t.id]);
   el.innerHTML=`<div class="page-head"><div><div class="eyebrow">Learn path</div><h1>From zero to offer</h1><p>${WORLDS.length} worlds, ${TOPICS.length} topics. Each node is a 10–20 minute lesson with notes, a diagram where it helps, real-world examples, interview traps and a quiz. Clear a node for +50 XP.</p></div><a class="btn primary" href="#topic-${(next||TOPICS[0]).id}">${next?"Next lesson":"Revise from the start"}</a></div>`+
   WORLDS.map(w=>{const ts=TOPICS.filter(t=>t.w===w.n);const d=ts.filter(t=>S.topics[t.id]).length;
     return `<section class="world" style="--wc:${w.c}"><div class="world-head"><div class="wn">${w.n}</div><div><h2>${esc(w.name)}</h2><p>${esc(w.blurb)}</p></div><div class="wp">${d}/${ts.length}<div class="bar" style="margin-top:4px"><i style="width:${d/ts.length*100}%;background:${w.c}"></i></div></div></div>
@@ -355,7 +355,7 @@ V.topic=function(el,id){
    <div class="row" style="justify-content:space-between;margin-top:16px">${prev?`<a class="btn ghost" href="#topic-${prev.id}">← ${esc(prev.title)}</a>`:"<span></span>"}${nxt?`<a class="btn" href="#topic-${nxt.id}">${esc(nxt.title)} →</a>`:""}</div></div>`;
   wireQuiz($("#tq"),t.quiz,"t:"+t.id+":",()=>{const b=$("#clearBtn");b.disabled=false;if(!done)$("#clearHint").textContent="Quiz finished. Claim your clear.";});
   $("#clearBtn").onclick=()=>{
-    if(!S.topics[t.id]){S.topics[t.id]=today();srsEnroll(t.id);bump("topic");toast("Added to your review queue: back tomorrow");addXP(50,`Cleared ${t.title}`);confetti(70);
+    if(!S.topics[t.id]){S.topics[t.id]=today();srsEnroll(t.id);if(window.SQ.onTopicClear)window.SQ.onTopicClear(t.id);bump("topic");toast("Added to your review queue: back tomorrow");addXP(50,`Cleared ${t.title}`);confetti(70);
       if(worldDone(t.w))modal(`<div class="eyebrow">World ${w.n} cleared</div><h2>${esc(w.badge)}</h2><p>You finished <b>${esc(w.name)}</b>. Badge unlocked.</p>`);
       render();}
     else{const k=t.id+today();if(S.revised[k]){toast("Already revised today");return;}S.revised[k]=1;bump("topic");addXP(10,"Topic revised");}

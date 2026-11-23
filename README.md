@@ -12,16 +12,15 @@ A game-style site for learning system design, from zero to fresher (SDE-1) inter
 
 | Section | What it does |
 |---|---|
-| **Home** | XP ring for today's goal, streak and week dots, 3 daily quests, today's planner task, study heatmap, reviews-due banner |
-| **Learn path** | 42 topics in 8 worlds (Foundations, Networking & APIs, Data & Storage, Async & Reliability, Distributed Systems, Interview Craft, Low-Level Design, AI System Design). Each topic opens with a beginner-friendly "Start here" box (plain-English explanation with an everyday analogy, plus the new words it uses), then interview-depth notes where jargon has tap-to-explain meanings, an architecture diagram, a real-world example, lines to say in the interview, traps, sources, and a "boss check" quiz that clears it |
+| **Home** | XP ring for today's goal, streak and week dots, 3 daily quests, today's Learn path task, study heatmap, reviews-due banner |
+| **Learn path** | One game map that combines the 14-week plan (Mon 16 Nov 2026 to Sun 21 Feb 2027) with all 42 topics and 21 problems. It has 120 levels in 14 stages: lessons, missions, boss problems, practice, checkpoints, side quests and bonus bosses. Each topic appears once, as a lesson on the first day that teaches it; later days that revisit it are missions with their own task. Every stage ends in a chest worth +100 XP. Lessons carry the colour of their world (Foundations, Networking & APIs, Data & Storage, Async & Reliability, Distributed Systems, Interview Craft, Low-Level Design, AI System Design), and a world-progress strip tracks all 8. Each topic opens with a beginner-friendly "Start here" box (plain-English explanation with an everyday analogy, plus the new words it uses), then interview-depth notes where jargon has tap-to-explain meanings, an architecture diagram, a real-world example, lines to say in the interview, traps, sources, and a "boss check" quiz that clears it |
 | **Fast revision** | Cram sheets with 5 tabs: topics by module, all design problems, LLD (SOLID, core patterns, how to run the round), numbers to know, and a searchable A–Z glossary of 250+ terms. Self-test mode blurs each card until you tap it |
 | **Review queue** | Spaced repetition for topics. A cleared topic comes back after 1, 3, 7, 16 and 35 days. Passing pushes it further out; missing brings it back tomorrow. Passing the 35-day review marks it Mastered |
 | **Design arena** | 21 interview problems (URL shortener, rate limiter, chat, news feed, Uber, Ticketmaster, payments, RAG Q&A, LLM gateway and more). Each has a brief, a timer, hints, and a full solution covering requirements, estimates, API, diagram, deep dives, mistakes and follow-ups. You grade yourself with a 16-point rubric |
 | **Practice gym** | Quiz blitz with combos, 86 flashcards (Leitner boxes), an estimation gym (QPS, storage, bandwidth, cache, servers), 45-minute timed mocks with phase checkpoints, and scorecards that chart your trend |
 | **Whiteboard** | An embedded Excalidraw with an architecture stencil, a practice frame, the reference diagram for each problem, autosave, a timer and PNG export |
 | **LLD dojo** | OOP and SOLID, a design patterns table with code, a guide to running the round, 6 worked problems, and a 38-problem ladder |
-| **My 14-week plan** | Day-by-day planner running Mon 16 Nov 2026 to Sun 21 Feb 2027. Each day links to the matching lesson |
-| **Trophies** | 38 badges, the level ladder, settings (daily goal, theme), and backup or restore of your progress |
+| **Trophies** | 40 badges, the level ladder, settings (daily goal, theme), and backup or restore of your progress |
 | **Library** | Curated outside resources |
 
 ![Design arena with 21 interview problems](docs/arena.png)
@@ -38,7 +37,8 @@ A game-style site for learning system design, from zero to fresher (SDE-1) inter
   | Correct quiz answer (more on a combo) | 10–15 |
   | Flashcard | 2 |
   | Estimation drill hit | 15 |
-  | Planner day | 30 |
+  | Learn path level (mission, practice, checkpoint) | 30 |
+  | Stage chest | 100 |
   | LLD problem | 30 |
   | Whiteboard save | 40 |
   | Problem attempt | 100 + rubric |
@@ -77,6 +77,7 @@ System Design/
         │                     # home / learn / arena views
         ├── views.js          # practice gym, LLD dojo, planner, trophies, library
         ├── revise.js         # fast revision + review queue
+        ├── journey.js        # Learn path game map: plan + topics + problems
         ├── data-easy.js      # beginner layer: plain-English intros, new words,
         │                     # problem briefs, glossary
         ├── easy.js           # injects "Start here" boxes + tap-to-explain jargon
