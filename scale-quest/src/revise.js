@@ -25,7 +25,7 @@ V.revise=function(el){
   const tab=V.revise.tab||"topics";const wn=V.revise.w||1;const hide=!!V.revise.hide;
   el.innerHTML=`<div class="page-head"><div><div class="eyebrow">Fast revision</div><h1>Every module on one screen</h1><p>The crisp version of the whole course: TL;DR, key ideas, lines to say, and traps. Read a module in 5–10 minutes the night before, or switch on self-test and recall each card before you peek.</p></div>
   <label class="card row" style="padding:10px 14px;cursor:pointer;gap:10px"><input type="checkbox" id="hideT" ${hide?"checked":""} style="width:18px;height:18px;accent-color:var(--accent)"><span><b>Self-test mode</b><span class="small muted" style="display:block">Blur answers; tap a card to reveal</span></span></label></div>
-  <div class="tabs">${[["topics","Topics by module"],["problems","Design problems"],["lld","LLD"],["numbers","Numbers to know"]].map(([k,n])=>`<button data-t="${k}" class="${tab===k?"on":""}">${n}</button>`).join("")}</div><div id="rvb" class="${hide?"selftest":""}"></div>`;
+  <div class="tabs">${[["topics","Topics by module"],["problems","Design problems"],["lld","LLD"],["numbers","Numbers to know"],["glossary","Glossary A–Z"]].map(([k,n])=>`<button data-t="${k}" class="${tab===k?"on":""}">${n}</button>`).join("")}</div><div id="rvb" class="${hide?"selftest":""}"></div>`;
   $$(".tabs button",el).forEach(b=>b.onclick=()=>{V.revise.tab=b.dataset.t;window.SQ.render();});
   $("#hideT").onchange=e=>{V.revise.hide=e.target.checked;$("#rvb").classList.toggle("selftest",e.target.checked);$$(".rv-card.shown",el).forEach(c=>c.classList.remove("shown"));};
   const box=$("#rvb");
@@ -37,7 +37,7 @@ V.revise=function(el){
     <button class="btn ${marked===today()?"":"gold"}" id="markMod">${marked===today()?"Revised today ✓":"Mark module revised +20 XP"}</button></div>
     <div class="rv-grid">${ts.map(t=>{const h=heads(t.notes);return `<article class="card rv-card" style="--wc:${w.c}">
       <div class="rv-top"><a href="#topic-${t.id}"><b>${esc(t.title)}</b></a>${srsTag(t.id)}</div>
-      <div class="rv-body"><p class="rv-tldr">${t.tldr}</p>
+      <div class="rv-body">${EASY[t.id]?`<details class="rv-plain"><summary>In plain English</summary>${EASY[t.id].p}</details>`:""}<p class="rv-tldr">${t.tldr}</p>
       ${h.length?`<div class="rv-k"><span>Key ideas</span>${h.map(x=>`<i>${x}</i>`).join("")}</div>`:""}
       ${t.say&&t.say.length?`<div class="rv-l say"><span>Say</span><ul>${t.say.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}
       ${t.traps&&t.traps.length?`<div class="rv-l trap"><span>Traps</span><ul>${t.traps.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}</div>
@@ -64,6 +64,11 @@ V.revise=function(el){
     <div class="rv-grid">${core.map(p=>`<article class="card rv-card" style="--wc:var(--w4)"><div class="rv-top"><b>${p[0]}</b><span class="tag">${p[1]}</span></div><div class="rv-body"><p class="rv-tldr">${p[2]}</p><div class="rv-l"><span>Use it for</span><p>${p[3]}</p></div></div><div class="rv-peek">Name the problem it solves, then tap</div></article>`).join("")}</div>
     <div class="sect"><h2>Running the round in 45 minutes</h2></div>
     <div class="card"><ol class="rv-steps"><li><b>Clarify (5 min):</b> list the use cases and what's out of scope.</li><li><b>Entities (5 min):</b> nouns become classes, verbs become methods. Draw the relationships.</li><li><b>Interfaces + patterns (5 min):</b> spot the strategy, state, observer or factory before coding.</li><li><b>Code (25 min):</b> core classes first, then the main flow, then a small demo/driver.</li><li><b>Extend (5 min):</b> show how a new requirement plugs in without rewriting, and mention thread safety.</li></ol></div>`;
+  }else if(tab==="glossary"){
+    const all=Object.entries(GLOSSARY).sort((a,b)=>a[0].localeCompare(b[0],undefined,{sensitivity:"base"}));
+    const where={};Object.entries(EASY).forEach(([id,e])=>e.w.forEach(([k])=>{(where[k]=where[k]||[]).push(id);}));
+    box.innerHTML=`<div class="row" style="margin-bottom:12px"><input id="glq" type="search" placeholder="Search ${all.length} terms, e.g. cache, shard, token" style="flex:1;min-width:0"><span class="small muted" id="glc"></span></div><div class="gl-list">${all.map(([k,d])=>{const ids=(where[k]||[]).map(id=>TOPICS.find(t=>t.id===id)).filter(Boolean);return `<div class="gl-item" data-s="${esc((k+" "+d).toLowerCase())}"><dt>${esc(k)}</dt><dd>${esc(d)}${ids.length?` <span class="small">${ids.map(t=>`<a href="#topic-${t.id}">${esc(t.title)}</a>`).join(" · ")}</span>`:""}</dd></div>`;}).join("")}</div>`;
+    const q=$("#glq"),c=$("#glc");const f=()=>{const v=q.value.trim().toLowerCase();let n=0;$$(".gl-item",box).forEach(it=>{const ok=!v||it.dataset.s.includes(v);it.hidden=!ok;if(ok)n++;});c.textContent=n+" terms";};q.oninput=f;f();
   }else{
     const parts=["The nines","Latency numbers","Capacity rules of thumb","Powers of two and ten","Template"].map(section).filter(Boolean);
     box.innerHTML=`<div class="grid g2">
