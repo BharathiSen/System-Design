@@ -1,5 +1,9 @@
 # Scale Quest
 
+**▶ Try it live: https://bharathisen.github.io/System-Design/** (no sign-up, works offline once loaded)
+
+![Scale Quest home screen](docs/home.png)
+
 A game-style site for learning system design, from zero to fresher (SDE-1) interview level. It is one HTML file with no backend and no install, and it covers both high-level design (HLD) and low-level design (LLD). You earn XP, levels, badges and a daily streak as you study.
 
 - **Offline copy:** open `scale-quest.html` in any modern browser.
@@ -19,6 +23,8 @@ A game-style site for learning system design, from zero to fresher (SDE-1) inter
 | **My 14-week plan** | Day-by-day planner running Mon 16 Nov 2026 to Sun 21 Feb 2027. Each day links to the matching lesson |
 | **Trophies** | 38 badges, the level ladder, settings (daily goal, theme), and backup or restore of your progress |
 | **Library** | Curated outside resources |
+
+![Design arena with 21 interview problems](docs/arena.png)
 
 ## How the game works
 
